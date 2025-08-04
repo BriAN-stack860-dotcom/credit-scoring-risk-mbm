@@ -120,4 +120,5 @@ def predict():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
->>>>>>> 93a0b3827f16cd066d98f1445135add9a9fcc735
+
+

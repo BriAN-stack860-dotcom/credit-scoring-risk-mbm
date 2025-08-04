@@ -42,7 +42,7 @@ def predict():
         input_scaled = scaler.transform(input_array)
         risk_prob = model.predict(input_scaled)[0][0]
 
-        # Use threshold = 0.1 for high recall
+        # Use threshold = 0.1 for high recall (updated comment)
         prediction = 1 if risk_prob > 0.1 else 0
 
         return jsonify({
@@ -56,5 +56,4 @@ def predict():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-
     app.run(host='0.0.0.0', port=port)

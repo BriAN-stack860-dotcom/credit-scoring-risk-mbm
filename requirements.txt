@@ -2,8 +2,5 @@ flask
 tensorflow==2.16.1
 numpy
 joblib
-<<<<<<< HEAD
 scikit-learn
-=======
-scikit-learn
->>>>>>> 93a0b3827f16cd066d98f1445135add9a9fcc735
+

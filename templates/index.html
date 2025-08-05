@@ -3,138 +3,396 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Credit Risk Prediction</title>
+  <title>Credit Risk Prediction | Financial Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f9;
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px;
-      color: #333;
+      padding: 0;
     }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      margin: 0;
+      padding: 0;
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    
     .container {
-      max-width: 800px;
-      margin: auto;
+      max-width: 900px;
+      margin: 40px auto;
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    
     h1 {
       text-align: center;
-      color: #2c3e50;
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 2.2rem;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: var(--gray);
+      margin-bottom: 30px;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+    
+    .form-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .form-group {
       margin-bottom: 20px;
     }
-    .form-group {
-      margin-bottom: 15px;
-    }
+    
     label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #2c3e50;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+      font-size: 0.9rem;
     }
-    input[type="number"], input[type="text"] {
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    input[type="number"], 
+    input[type="text"] {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-      box-sizing: border-box;
+      padding: 12px 15px;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background-color: var(--light);
     }
+    
+    input[type="number"]:focus, 
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-size: 1rem;
+    }
+    
+    .btn-container {
+      grid-column: span 2;
+      text-align: center;
+      margin-top: 10px;
+    }
+    
     button {
-      background: #007BFF;
+      background: var(--primary);
       color: white;
-      padding: 12px 24px;
+      padding: 14px 32px;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
-      margin-top: 20px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
+    
     button:hover {
-      background: #0056b3;
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
     }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button .icon {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
+    
     #result {
       margin-top: 30px;
-      padding: 20px;
-      border-radius: 8px;
-      font-size: 18px;
+      padding: 25px;
+      border-radius: var(--border-radius);
+      font-size: 1.1rem;
       text-align: center;
       display: none;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
+    
     .high-risk {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background: linear-gradient(135deg, #fff5f7 0%, #feeff3 100%);
+      color: #b00020;
+      border: 1px solid #ffcdd2;
     }
+    
     .low-risk {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      background: linear-gradient(135deg, #f0fff4 0%, #e6ffed 100%);
+      color: #1b5e20;
+      border: 1px solid #c8e6c9;
+    }
+    
+    .risk-score {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .risk-label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: inline-block;
+      padding: 6px 15px;
+      border-radius: 20px;
+    }
+    
+    .high-risk .risk-label {
+      background-color: #ffebee;
+    }
+    
+    .low-risk .risk-label {
+      background-color: #e8f5e9;
+    }
+    
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(67, 97, 238, 0.2);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 15px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+        padding: 25px;
+      }
+      
+      .form-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-container {
+        grid-column: span 1;
+      }
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      color: var(--gray);
+      cursor: help;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--dark);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+      font-weight: 300;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🏦 Credit Risk Prediction</h1>
-    <p style="text-align:center; color:#666;">Enter borrower details to predict loan default risk</p>
+    <h1>📊 Credit Risk Prediction</h1>
+    <p class="subtitle">Assess borrower default probability with our advanced analytics engine</p>
 
     <form id="predictForm">
-      <div class="form-group">
-        <label>Utilization:</label>
-        <input type="number" name="RevolvingUtilizationOfUnsecuredLines" step="0.01" value="0.5" required />
+      <div class="form-container">
+        <div class="form-group">
+          <label>Utilization Ratio <span class="tooltip">?<span class="tooltiptext">Percentage of available credit currently being used</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="RevolvingUtilizationOfUnsecuredLines" step="0.01" value="0.5" min="0" max="1" required />
+            <span class="input-icon">%</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Age <span class="tooltip">?<span class="tooltiptext">Borrower's age in years</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="age" value="45" min="18" max="100" required />
+            <span class="input-icon">👤</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Late Payments (30-59 Days) <span class="tooltip">?<span class="tooltiptext">Number of 30-59 day delinquencies</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfTime30-59DaysPastDueNotWorse" value="0" min="0" required />
+            <span class="input-icon">⏱️</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Debt Ratio <span class="tooltip">?<span class="tooltiptext">Monthly debt payments divided by monthly income</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="DebtRatio" step="0.01" value="0.4" min="0" required />
+            <span class="input-icon">🧮</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Monthly Income ($) <span class="tooltip">?<span class="tooltiptext">Borrower's monthly income</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="MonthlyIncome" value="5000" min="0" required />
+            <span class="input-icon">💵</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Open Credit Lines <span class="tooltip">?<span class="tooltiptext">Number of open credit lines/loans</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfOpenCreditLinesAndLoans" value="5" min="0" required />
+            <span class="input-icon">📊</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Late Payments (90+ Days) <span class="tooltip">?<span class="tooltiptext">Number of 90+ day delinquencies</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfTimes90DaysLate" value="0" min="0" required />
+            <span class="input-icon">⚠️</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Real Estate Loans <span class="tooltip">?<span class="tooltiptext">Number of mortgage/real estate loans</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberRealEstateLoansOrLines" value="1" min="0" required />
+            <span class="input-icon">🏠</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Late Payments (60-89 Days) <span class="tooltip">?<span class="tooltiptext">Number of 60-89 day delinquencies</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfTime60-89DaysPastDueNotWorse" value="0" min="0" required />
+            <span class="input-icon">⏳</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Dependents <span class="tooltip">?<span class="tooltiptext">Number of dependents in family</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfDependents" value="2" min="0" required />
+            <span class="input-icon">👪</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Total Late Payments <span class="tooltip">?<span class="tooltiptext">Sum of all late payments</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="TotalLatePayments" value="0" min="0" required />
+            <span class="input-icon">⛔</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Missing Income Data <span class="tooltip">?<span class="tooltiptext">1 if income data was missing, 0 otherwise</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="MonthlyIncome_was_missing" min="0" max="1" value="0" required />
+            <span class="input-icon">❓</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Missing Dependents Data <span class="tooltip">?<span class="tooltiptext">1 if dependents data was missing, 0 otherwise</span></span></label>
+          <div class="input-wrapper">
+            <input type="number" name="NumberOfDependents_was_missing" min="0" max="1" value="0" required />
+            <span class="input-icon">❓</span>
+          </div>
+        </div>
+        
+        <div class="btn-container">
+          <button type="submit">
+            <span class="icon">📈</span>
+            Analyze Risk
+          </button>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Age:</label>
-        <input type="number" name="age" value="45" required />
-      </div>
-      <div class="form-group">
-        <label>Late 30-59 Days:</label>
-        <input type="number" name="NumberOfTime30-59DaysPastDueNotWorse" value="0" required />
-      </div>
-      <div class="form-group">
-        <label>Debt Ratio:</label>
-        <input type="number" name="DebtRatio" step="0.01" value="0.4" required />
-      </div>
-      <div class="form-group">
-        <label>Monthly Income:</label>
-        <input type="number" name="MonthlyIncome" value="5000" required />
-      </div>
-      <div class="form-group">
-        <label>Open Credit Lines:</label>
-        <input type="number" name="NumberOfOpenCreditLinesAndLoans" value="5" required />
-      </div>
-      <div class="form-group">
-        <label>Late 90+ Days:</label>
-        <input type="number" name="NumberOfTimes90DaysLate" value="0" required />
-      </div>
-      <div class="form-group">
-        <label>Real Estate Loans:</label>
-        <input type="number" name="NumberRealEstateLoansOrLines" value="1" required />
-      </div>
-      <div class="form-group">
-        <label>Late 60-89 Days:</label>
-        <input type="number" name="NumberOfTime60-89DaysPastDueNotWorse" value="0" required />
-      </div>
-      <div class="form-group">
-        <label>Dependents:</label>
-        <input type="number" name="NumberOfDependents" value="2" required />
-      </div>
-      <div class="form-group">
-        <label>Total Late Payments:</label>
-        <input type="number" name="TotalLatePayments" value="0" required />
-      </div>
-      <div class="form-group">
-        <label>Missing Income (0/1):</label>
-        <input type="number" name="MonthlyIncome_was_missing" min="0" max="1" value="0" required />
-      </div>
-      <div class="form-group">
-        <label>Missing Dependents (0/1):</label>
-        <input type="number" name="NumberOfDependents_was_missing" min="0" max="1" value="0" required />
-      </div>
-
-      <button type="submit">Predict Risk</button>
     </form>
 
     <div id="result"></div>
@@ -147,9 +405,13 @@
       const data = Object.fromEntries(formData);
 
       // Show loading
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('result').className = '';
-      document.getElementById('result').innerHTML = 'Calculating risk...';
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+      resultDiv.className = 'loading';
+      resultDiv.innerHTML = `
+        <div class="spinner"></div>
+        <div>Analyzing credit risk profile...</div>
+      `;
 
       try {
         const res = await fetch('/predict', {
@@ -164,18 +426,29 @@
           const riskPercent = (result.risk_score * 100).toFixed(2);
           const isHighRisk = result.prediction === 1;
 
-          document.getElementById('result').innerHTML = `
-            <strong>Risk Score: ${riskPercent}%</strong><br>
-            <strong>Prediction: ${isHighRisk ? 'High Risk' : 'Low Risk'}</strong>
+          resultDiv.innerHTML = `
+            <div class="risk-score">${riskPercent}%</div>
+            <div class="risk-label">${isHighRisk ? 'High Risk' : 'Low Risk'}</div>
+            <div style="margin-top:15px;font-size:0.9rem;">
+              ${isHighRisk ? '⚠️ Significant default probability detected' : '✅ Favorable credit profile'}
+            </div>
           `;
-          document.getElementById('result').className = isHighRisk ? 'high-risk' : 'low-risk';
+          resultDiv.className = isHighRisk ? 'high-risk' : 'low-risk';
         } else {
-          document.getElementById('result').innerHTML = `Error: ${result.error}`;
-          document.getElementById('result').className = 'high-risk';
+          resultDiv.innerHTML = `
+            <div style="color:var(--danger);font-weight:500;">
+              ⚠️ Error: ${result.error || 'Processing failed'}
+            </div>
+          `;
+          resultDiv.className = 'high-risk';
         }
       } catch (error) {
-        document.getElementById('result').innerHTML = `Network Error: ${error.message}`;
-        document.getElementById('result').className = 'high-risk';
+        resultDiv.innerHTML = `
+          <div style="color:var(--danger);font-weight:500;">
+            ⚠️ Network Error: ${error.message || 'Connection failed'}
+          </div>
+        `;
+        resultDiv.className = 'high-risk';
       }
     };
   </script>
